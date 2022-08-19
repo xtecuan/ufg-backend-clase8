@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://blitzthinkw2:8080/webservicepersonas/PersonasWebService?wsdl" uri="wsdl/blitzthinkw2_8080/webservicepersonas/PersonasWebService.wsdl"/>
+    <system systemId="http://blitzthinkw2:8080/webservicepersonas/PersonasWebService?xsd=1" uri="wsdl/blitzthinkw2_8080/webservicepersonas/PersonasWebService.xsd_1.xsd"/>
+</catalog>

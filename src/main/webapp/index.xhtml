@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./resources/base-template.xhtml"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">
+        Mantenimiento de Personas
+    </ui:define>
+
+    <ui:define name="top">
+        <p:outputPanel><h1>Mantenimiento de Personas</h1></p:outputPanel>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+
+            <p:messages id="msg"/>
+            
+            <p:panelGrid columns="2">
+
+                <p:outputLabel value="Nombres:" for="nombres"/><p:inputText id="nombres" value="#{indexBean.persona.nombres}"/>
+                <p:outputLabel value="Apellidos:" for="apellidos"/><p:inputText id="apellidos" value="#{indexBean.persona.apellidos}"/>
+                <p:outputLabel value="Email:" for="email" /><p:inputText id="email" value="#{indexBean.persona.email}"/>
+                <p:outputLabel value="sexo:" for="sexo" />
+
+                <p:selectOneMenu id="sexo" value="#{indexBean.persona.sexo}" >
+                    <f:selectItems value="#{indexBean.sexoOptions}"/>
+                </p:selectOneMenu>
+
+                <!--p:outputLabel for="fechaNacimiento" value="fecha Nacimiento:"/>
+                <p:datePicker id="fechaNacimiento" selectionMode="range" value="# { indexBean.persona.fechaNacimiento}"/>-->
+                
+                <p:commandButton value="Guardar" actionListener="#{indexBean.guardarPersona}" update="msg"/>
+                
+            </p:panelGrid>
+
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
