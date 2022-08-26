@@ -5,7 +5,8 @@
                 template="./resources/base-template.xhtml"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="title">
         Mantenimiento de Personas
@@ -16,11 +17,11 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form>
+        <h:form id="form1">
 
             <p:messages id="msg"/>
-            
-            <p:panelGrid columns="2">
+
+            <p:panelGrid columns="2" style="align-content: center">
 
                 <p:outputLabel value="Nombres:" for="nombres"/><p:inputText id="nombres" value="#{indexBean.persona.nombres}"/>
                 <p:outputLabel value="Apellidos:" for="apellidos"/><p:inputText id="apellidos" value="#{indexBean.persona.apellidos}"/>
@@ -34,10 +35,46 @@
                 <p:outputLabel for="fechaNacimiento" value="Fecha Nacimiento:"/>
                 <p:datePicker id="fechaNacimiento" value="#{indexBean.persona.fechaNacimiento}"  monthNavigator="true" yearNavigator="true"
                               pattern="yyyy-MM-dd" yearRange="1920:2022"/>
-                
-                <p:commandButton value="Guardar" actionListener="#{indexBean.guardarPersona}" update="msg"/>
-                
+
+                <p:commandButton value="Guardar" actionListener="#{indexBean.guardarPersona}" update="form1,formData"/>
+
             </p:panelGrid>
+        </h:form>
+        <h:form id="formData">
+
+            <p:panel>
+                <p:dataTable id="personas" var="persona" value="#{indexBean.personas}" rowKey="#{persona.idPersona}"
+                             selection="#{indexBean.selectedPersona}" selectionMode="single">
+                    <f:facet name="header">
+                        Click para mas opciones
+                    </f:facet>
+
+                    <p:column headerText="IdPersona">
+                        <h:outputText value="#{persona.idPersona}" />
+                    </p:column>
+                    <p:column headerText="Nombres">
+                        <h:outputText value="#{persona.nombres}" />
+                    </p:column>
+                    <p:column headerText="Apellidos">
+                        <h:outputText value="#{persona.apellidos}" />
+                    </p:column>
+                    <p:column headerText="Email">
+                        <h:outputText value="#{persona.email}" />
+                    </p:column>
+                    <p:column headerText="Fecha Nacimiento:">
+                        <h:outputText value="#{persona.fechaNacimiento}" converter="#{dateConverter}">
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Sexo">                       
+                        <h:outputText value="#{persona.sexo eq 'M' ? 'Hombre' : 'Mujer'}" />
+                    </p:column>
+                </p:dataTable>
+
+                <p:contextMenu for="personas">
+                    <p:menuitem value="Delete" update="formData,form1" icon="pi pi-times"
+                                action="#{indexBean.deletePersona}"/>
+                </p:contextMenu>
+            </p:panel>
 
 
         </h:form>

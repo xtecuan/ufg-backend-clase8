@@ -4,6 +4,7 @@
  */
 package com.xtesoft.webservices.clientes.beans;
 
+import com.xtesoft.webservices.clientes.Personas;
 import com.xtesoft.webservices.clientes.PersonasDTO;
 import com.xtesoft.webservices.clientes.PersonasWebService;
 import com.xtesoft.webservices.clientes.PersonasWebService_Service;
@@ -36,6 +37,8 @@ public class IndexBean implements Serializable {
     private PersonasWebService port;
     private PersDTO persona;
     private List<SelectItem> sexoOptions;
+    private List<Personas> personas;
+    private Personas selectedPersona;
 
     @PostConstruct
     public void init() {
@@ -43,10 +46,12 @@ public class IndexBean implements Serializable {
         sexoOptions = Arrays.asList(new SelectItem("M", "Masculino"), new SelectItem("F", "Femenino"));
         try { // Call Web Service Operation
             port = service.getPersonasWebServicePort();
+            personas = port.findAll();
         } catch (Exception ex) {
             // TODO handle custom exceptions here
             System.err.println("Error inicializando el servlet: " + ex);
         }
+        selectedPersona = new Personas();
     }
 
     /**
@@ -74,6 +79,8 @@ public class IndexBean implements Serializable {
     public void guardarPersona() {
         if (this.getPersona() != null) {
             port.save(fromFormularioDTO());
+            this.persona = new PersDTO();
+            this.personas = port.findAll();
             FacesContext.getCurrentInstance().addMessage("Exito:", new FacesMessage("Se agrego una persona"));
         }
     }
@@ -101,5 +108,30 @@ public class IndexBean implements Serializable {
     }
 
     private static GregorianCalendar gc = new GregorianCalendar();
+
+    public List<Personas> getPersonas() {
+        return personas;
+    }
+
+    public void setPersonas(List<Personas> personas) {
+        this.personas = personas;
+    }
+
+    public Personas getSelectedPersona() {
+        return selectedPersona;
+    }
+
+    public void setSelectedPersona(Personas selectedPersona) {
+        this.selectedPersona = selectedPersona;
+    }
+
+    public void deletePersona() {
+        if (this.selectedPersona != null) {
+            port.delete(selectedPersona.getIdPersona());
+            this.selectedPersona = null;
+            this.personas = port.findAll();
+            FacesContext.getCurrentInstance().addMessage("Exito:", new FacesMessage("Se borro una persona"));
+        }
+    }
 
 }
