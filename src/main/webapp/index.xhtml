@@ -31,8 +31,9 @@
                     <f:selectItems value="#{indexBean.sexoOptions}"/>
                 </p:selectOneMenu>
 
-                <!--p:outputLabel for="fechaNacimiento" value="fecha Nacimiento:"/>
-                <p:datePicker id="fechaNacimiento" selectionMode="range" value="# { indexBean.persona.fechaNacimiento}"/>-->
+                <p:outputLabel for="fechaNacimiento" value="Fecha Nacimiento:"/>
+                <p:datePicker id="fechaNacimiento" value="#{indexBean.persona.fechaNacimiento}"  monthNavigator="true" yearNavigator="true"
+                              pattern="yyyy-MM-dd" yearRange="1920:2022"/>
                 
                 <p:commandButton value="Guardar" actionListener="#{indexBean.guardarPersona}" update="msg"/>
                 

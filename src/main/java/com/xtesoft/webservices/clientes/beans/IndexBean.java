@@ -84,7 +84,7 @@ public class IndexBean implements Serializable {
         p.setNombres(this.persona.getNombres());
         p.setEmail(this.persona.getEmail());
         p.setSexo(this.persona.getSexo());
-        //p.setFechaNacimiento(fromDate2XMLGregCal(this.persona.getFechaNacimiento()));
+        p.setFechaNacimiento(fromDate2XMLGregCal(this.persona.getFechaNacimiento()));
         return p;
     }
 
