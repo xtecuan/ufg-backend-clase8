@@ -4,6 +4,7 @@
  */
 package com.xtesoft.webservices.clientes.beans.converters;
 
+import com.xtesoft.webservices.clientes.utils.DateUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -20,8 +21,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @Named(value = "dateConverter")
 public class DateConverter implements Converter {
 
-    private static GregorianCalendar gc = new GregorianCalendar();
-
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
@@ -36,15 +35,8 @@ public class DateConverter implements Converter {
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object t) {
         XMLGregorianCalendar d = (XMLGregorianCalendar) t;
-        return sdf.format(toDate(d));
+        return sdf.format(DateUtils.toDate(d));
 
-    }
-
-    public static Date toDate(XMLGregorianCalendar calendar) {
-        if (calendar == null) {
-            return null;
-        }
-        return calendar.toGregorianCalendar().getTime();
     }
 
 }

@@ -21,8 +21,7 @@
 
             <p:messages id="msg"/>
 
-            <p:panelGrid columns="2" style="align-content: center">
-
+            <p:panelGrid columns="2">
                 <p:outputLabel value="Nombres:" for="nombres"/><p:inputText id="nombres" value="#{indexBean.persona.nombres}"/>
                 <p:outputLabel value="Apellidos:" for="apellidos"/><p:inputText id="apellidos" value="#{indexBean.persona.apellidos}"/>
                 <p:outputLabel value="Email:" for="email" /><p:inputText id="email" value="#{indexBean.persona.email}"/>
@@ -34,19 +33,24 @@
 
                 <p:outputLabel for="fechaNacimiento" value="Fecha Nacimiento:"/>
                 <p:datePicker id="fechaNacimiento" value="#{indexBean.persona.fechaNacimiento}"  monthNavigator="true" yearNavigator="true"
-                              pattern="yyyy-MM-dd" yearRange="1920:2022"/>
-
-                <p:commandButton value="Guardar" actionListener="#{indexBean.guardarPersona}" update="form1,formData"/>
+                              pattern="yyyy-MM-dd" yearRange="1920:2022"/>            
 
             </p:panelGrid>
+
+            <p:commandButton rendered="#{empty indexBean.persona.idPersona}" value="Guardar" actionListener="#{indexBean.guardarPersona}" update="form1,formData"/>
+            <p:commandButton rendered="#{not empty indexBean.persona.idPersona}" value="Actualizar" actionListener="#{indexBean.actualizarPersona}" update="form1,formData"/>
+            <p:commandButton  value="Cancelar" actionListener="#{indexBean.cancelar}" update="form1,formData"/>
         </h:form>
         <h:form id="formData">
 
             <p:panel>
                 <p:dataTable id="personas" var="persona" value="#{indexBean.personas}" rowKey="#{persona.idPersona}"
-                             selection="#{indexBean.selectedPersona}" selectionMode="single">
+                             selection="#{indexBean.selectedPersona}" selectionMode="single" rows="5" paginator="true" paginatorPosition="both"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">
                     <f:facet name="header">
-                        Click para mas opciones
+                        Seleccionar una persona para editar o borrar (Click derecho)
                     </f:facet>
 
                     <p:column headerText="IdPersona">
@@ -71,8 +75,10 @@
                 </p:dataTable>
 
                 <p:contextMenu for="personas">
-                    <p:menuitem value="Delete" update="formData,form1" icon="pi pi-times"
+                    <p:menuitem value="Borrar" update="formData,form1" icon="pi pi-times"
                                 action="#{indexBean.deletePersona}"/>
+                    <p:menuitem value="Actualizar" update="form1" icon="pi pi-times"
+                                action="#{indexBean.prepareEdit}"/>
                 </p:contextMenu>
             </p:panel>
 

@@ -9,6 +9,7 @@ import com.xtesoft.webservices.clientes.PersonasDTO;
 import com.xtesoft.webservices.clientes.PersonasWebService;
 import com.xtesoft.webservices.clientes.PersonasWebService_Service;
 import com.xtesoft.webservices.clientes.dtos.PersDTO;
+import com.xtesoft.webservices.clientes.utils.DateUtils;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import java.io.Serializable;
@@ -39,6 +40,7 @@ public class IndexBean implements Serializable {
     private List<SelectItem> sexoOptions;
     private List<Personas> personas;
     private Personas selectedPersona;
+
 
     @PostConstruct
     public void init() {
@@ -84,6 +86,11 @@ public class IndexBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("Exito:", new FacesMessage("Se agrego una persona"));
         }
     }
+    
+    public void cancelar() {
+       this.persona = new PersDTO();
+       this.personas = port.findAll();
+    }
 
     public PersonasDTO fromFormularioDTO() {
         PersonasDTO p = new PersonasDTO();
@@ -91,23 +98,11 @@ public class IndexBean implements Serializable {
         p.setNombres(this.persona.getNombres());
         p.setEmail(this.persona.getEmail());
         p.setSexo(this.persona.getSexo());
-        p.setFechaNacimiento(fromDate2XMLGregCal(this.persona.getFechaNacimiento()));
+        p.setFechaNacimiento(DateUtils.fromDate(this.persona.getFechaNacimiento()));
         return p;
     }
 
-    public XMLGregorianCalendar fromDate2XMLGregCal(Date d) {
-        XMLGregorianCalendar xmlDate = null;
-        gc.setTime(d);
-        try {
-            xmlDate = DatatypeFactory.newInstance()
-                    .newXMLGregorianCalendar(gc);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return xmlDate;
-    }
-
-    private static GregorianCalendar gc = new GregorianCalendar();
+    
 
     public List<Personas> getPersonas() {
         return personas;
@@ -133,5 +128,27 @@ public class IndexBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage("Exito:", new FacesMessage("Se borro una persona"));
         }
     }
+    
+    public void prepareEdit() {
+        if (this.selectedPersona != null) {
+            this.persona = new PersDTO();    
+            this.persona.setNombres(this.selectedPersona.getNombres());
+            this.persona.setApellidos(this.selectedPersona.getApellidos());            
+            this.persona.setEmail(this.selectedPersona.getEmail());
+            this.persona.setSexo(this.selectedPersona.getSexo());
+            this.persona.setFechaNacimiento(DateUtils.toDate(this.selectedPersona.getFechaNacimiento()));
+            this.persona.setIdPersona(this.selectedPersona.getIdPersona());
+            
+        }
+    }
+
+   public void actualizarPersona(){
+        if (this.getPersona() != null) {
+            port.update(fromFormularioDTO(),this.getPersona().getIdPersona());
+            this.persona = new PersDTO();
+            this.personas = port.findAll();
+            FacesContext.getCurrentInstance().addMessage("Exito:", new FacesMessage("Se actualizo una persona"));
+        }
+   }
 
 }
